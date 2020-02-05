@@ -14,6 +14,9 @@ include /usr/share/dpkg/architecture.mk
 # Ubuntu ld adds -Bsymbolic-functions by default, but that prevents FFmpeg from building.
 export DEB_LDFLAGS_MAINT_STRIP=-Wl,-Bsymbolic-functions
 
+# Hardened toolchain already adds -fstack-protector-all and -fstack-protector-strong is not supported by Jessie's gcc-4.8
+export DEB_CFLAGS_MAINT_STRIP=-fstack-protector-strong
+
 # Package name for the extra flavor.
 EXTRA_PKGS := $(shell sed -nr 's/^Package:[[:space:]]*(.*extra[0-9]+)[[:space:]]*$$/\1/p' debian/control)
 FLAVORS = standard extra static
@@ -28,9 +31,9 @@ FLAVORS = standard extra static
 #   --enable-libilbc                (see #675959 for the RFP bug)
 #   --enable-libkvazaar
 #   --enable-libmfx
-#   --enable-libmodplug             (see #849840: replaced with libopenmpt)
 #   --enable-libnut
 #   --enable-libopenh264
+#   --enable-libopenmpt
 #   --enable-libschroedinger        (see #845037: removal due to security issues)
 #   --enable-libutvideo
 #   --enable-libvidstab             (see #709193 for the RFP bug)
@@ -57,16 +60,16 @@ CONFIG := --prefix=/usr \
 	--enable-libbs2b \
 	--enable-libcaca \
 	--enable-libcdio \
-	--enable-libebur128 \
+	--disable-libebur128 \
 	--enable-libflite \
 	--enable-libfontconfig \
 	--enable-libfreetype \
 	--enable-libfribidi \
 	--enable-libgme \
 	--enable-libgsm \
+	--enable-libmodplug \
 	--enable-libmp3lame \
 	--enable-libopenjpeg \
-	--enable-libopenmpt \
 	--enable-libopus \
 	--enable-libpulse \
 	--enable-librubberband \
@@ -81,7 +84,7 @@ CONFIG := --prefix=/usr \
 	--enable-libvpx \
 	--enable-libwavpack \
 	--enable-libwebp \
-	--enable-libx265 \
+	--disable-libx265 \
 	--enable-libxvid \
 	--enable-libzmq \
 	--enable-libzvbi \
@@ -100,7 +103,7 @@ CONFIG_extra = --enable-shared \
 	--disable-programs \
 	--enable-libopencore_amrnb \
 	--enable-libopencore_amrwb \
-	--enable-libtesseract \
+	--disable-libtesseract \
 	--enable-libvo_amrwbenc
 
 # The static libraries should not be built with PIC.
@@ -111,6 +114,12 @@ CONFIG_static = --disable-pic \
 # Disable optimizations if requested.
 ifneq (,$(filter $(DEB_BUILD_OPTIONS),noopt))
 	CONFIG += --disable-optimizations
+endif
+
+# Compilation with PIE fails on i386 due to some ASM code with GCC 4.9
+ifneq (,$(filter $(DEB_HOST_ARCH),i386))
+	CC := gcc-4.8
+	CXX := g++-4.8
 endif
 
 # Respect CC/CXX from the environment, if they differ from the default.
