@@ -1,3 +1,9 @@
+ffmpeg (7:3.2.14-1~deb9u2sci8u1) scibian8; urgency=medium
+
+  * Update rules and control with backport versions
+
+ -- Pierre Trespeuch <pierre-externe.trespeuch@edf.fr>  Wed, 05 Feb 2020 17:07:10 +0100
+
 ffmpeg (7:3.2.14-1~deb9u1) stretch-security; urgency=medium
 
   * New upstream release(s).

@@ -1,15 +1,15 @@
 Source: ffmpeg
 Section: video
 Priority: optional
-Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
+Maintainer: Scibian Project <packaging@scibian.org>
 Uploaders: Andreas Cadhalpun <Andreas.Cadhalpun@googlemail.com>,
  Alexander Strasser <eclipse7@gmx.net>,
  Reinhard Tartler <siretart@tauware.de>,
  Balint Reczey <balint@balintreczey.hu>
 Homepage: https://ffmpeg.org/
 Standards-Version: 3.9.8
-Vcs-Git: https://anonscm.debian.org/git/pkg-multimedia/ffmpeg.git
-Vcs-Browser: https://anonscm.debian.org/cgit/pkg-multimedia/ffmpeg.git
+Vcs-Git: https://github.com/scibian/ffmpeg.git
+Vcs-Browser: https://github.com/scibian/ffmpeg
 Build-Depends-Indep:
 # needed to minify the CSS files
  cleancss,
